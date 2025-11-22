@@ -15,12 +15,12 @@ export function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <motion.span 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
             className="text-primary font-semibold tracking-wider uppercase text-sm mb-4 block"
           >
             Portfolio
@@ -28,32 +28,56 @@ export function Hero() {
           
           <h1 className="text-5xl md:text-7xl font-bold font-display tracking-tight mb-6 leading-[1.1]">
             Hi, I'm <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-              {personalInfo.name.split(" ")[0]}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 inline-block">
+              {personalInfo.name.split("").map((char, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + i * 0.05, ease: "backOut" }}
+                  className="inline-block"
+                >
+                  {char === " " ? "\u00A0" : char}
+                </motion.span>
+              ))}
             </span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-lg font-light leading-relaxed">
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+            className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-lg font-light leading-relaxed"
+          >
             {personalInfo.role}. <br />
             <span className="text-foreground/80">{personalInfo.tagline}</span>
-          </p>
+          </motion.p>
           
-          <div className="flex flex-wrap gap-4">
-            <a 
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.5 }}
+            className="flex flex-wrap gap-4"
+          >
+            <motion.a 
               href="#contact" 
-              className="bg-primary text-primary-foreground px-8 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
+              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(59, 130, 246, 0.5)" }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-primary text-primary-foreground px-8 py-3 rounded-full font-medium transition-colors flex items-center gap-2"
             >
               Contact Me
-            </a>
-            <a 
+            </motion.a>
+            <motion.a 
               href={personalInfo.socials.find(s => s.name === "LinkedIn")?.url}
               target="_blank"
               rel="noreferrer"
-              className="bg-secondary text-secondary-foreground px-8 py-3 rounded-full font-medium hover:bg-secondary/80 transition-colors flex items-center gap-2"
+              whileHover={{ scale: 1.05, backgroundColor: "hsl(217 32% 25%)" }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-secondary text-secondary-foreground px-8 py-3 rounded-full font-medium transition-colors flex items-center gap-2"
             >
               LinkedIn <ExternalLink size={16} />
-            </a>
-          </div>
+            </motion.a>
+          </motion.div>
         </motion.div>
 
         <motion.div

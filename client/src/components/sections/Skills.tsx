@@ -27,20 +27,31 @@ export function Skills() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.2 }}
-              className="glass rounded-2xl p-6 border border-white/5 hover:border-primary/30 transition-all duration-300 hover:-translate-y-1"
+              transition={{ delay: idx * 0.2, duration: 0.5, ease: "easeOut" }}
+              whileHover={{ y: -10, scale: 1.02 }}
+              className="glass rounded-2xl p-6 border border-white/5 hover:border-primary/30 transition-all duration-300 group relative overflow-hidden"
             >
-              <h3 className="text-xl font-bold mb-6 pb-2 border-b border-white/10 flex items-center gap-2">
-                <span className="w-2 h-6 bg-primary rounded-full inline-block" />
+              {/* Hover Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <h3 className="text-xl font-bold mb-6 pb-2 border-b border-white/10 flex items-center gap-2 relative z-10">
+                <motion.span 
+                  className="w-2 h-6 bg-primary rounded-full inline-block"
+                  layoutId={`pill-${idx}`}
+                />
                 {category.category}
               </h3>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 relative z-10">
                 {category.items.map((skill, sIdx) => (
-                  <div key={sIdx} className="flex items-center gap-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
-                    <skill.icon className="text-2xl text-primary/80" />
+                  <motion.div 
+                    key={sIdx} 
+                    whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
+                    className="flex items-center gap-3 p-3 rounded-lg bg-white/5 transition-colors cursor-default"
+                  >
+                    <skill.icon className="text-2xl text-primary/80 group-hover:text-primary transition-colors" />
                     <span className="text-sm font-medium">{skill.name}</span>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
