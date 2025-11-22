@@ -2,6 +2,9 @@ import { motion, useScroll, useTransform, useSpring, useMotionValue } from "fram
 import { personalInfo } from "@/lib/data";
 import { ArrowDown, ExternalLink } from "lucide-react";
 import { useEffect } from "react";
+import { ScrambleText } from "@/components/ui/ScrambleText";
+import { Typewriter } from "@/components/ui/Typewriter";
+import { AudioWaveform } from "@/components/ui/AudioWaveform";
 
 export function Hero() {
   const { scrollY } = useScroll();
@@ -50,41 +53,45 @@ export function Hero() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           style={{ zIndex: 10 }}
         >
-          <motion.span 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-primary font-semibold tracking-wider uppercase text-sm mb-4 block"
-          >
-            Portfolio
-          </motion.span>
+          <div className="flex items-center gap-3 mb-4">
+            <motion.span 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-primary font-semibold tracking-wider uppercase text-sm block"
+            >
+              Portfolio
+            </motion.span>
+            <AudioWaveform />
+          </div>
           
           <h1 className="text-5xl md:text-7xl font-bold font-display tracking-tight mb-6 leading-[1.1]">
             Hi, I'm <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 inline-block">
-              {personalInfo.name.split("").map((char, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + i * 0.05, ease: "backOut" }}
-                  className="inline-block"
-                >
-                  {char === " " ? "\u00A0" : char}
-                </motion.span>
-              ))}
+              <ScrambleText text={personalInfo.name} />
             </span>
           </h1>
           
-          <motion.p 
+          <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.8 }}
-            className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-lg font-light leading-relaxed"
+            className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-lg font-light leading-relaxed min-h-[80px]"
           >
-            {personalInfo.role}. <br />
-            <span className="text-foreground/80">{personalInfo.tagline}</span>
-          </motion.p>
+             <Typewriter 
+               text={[
+                 `${personalInfo.role}.`,
+                 "Building Scalable Systems.",
+                 "Bridging Tech & People."
+               ]}
+               loop={true}
+               speed={80}
+               delay={2000}
+               cursorClassName="bg-green-400"
+             />
+             <br />
+            <span className="text-foreground/80 text-base mt-2 block">{personalInfo.tagline}</span>
+          </motion.div>
           
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -135,6 +142,14 @@ export function Hero() {
                 </div>
                 <h3 className="text-2xl font-bold mb-2">Integrations Specialist</h3>
                 <p className="text-muted-foreground">Connecting systems, building communities.</p>
+                
+                <div className="mt-6 font-mono text-xs text-left bg-black/50 p-3 rounded border border-white/10 text-green-400">
+                   <Typewriter 
+                     text={["> Initializing...", "> Connecting APIs...", "> Status: ONLINE"]} 
+                     loop={false} 
+                     speed={50}
+                   />
+                </div>
               </div>
 
               {/* Floating elements with stronger parallax */}

@@ -131,3 +131,8 @@
   background: var(--xray-primary) !important;
   border: 1px solid var(--xray-primary) !important;
 }
+
+/* Reveal on Scroll Helpers (Used in conjunction with Framer Motion for consistency) */
+.reveal-on-scroll {
+  /* JS/Framer Motion handles the actual transition, but we can add a class marker if needed */
+}
