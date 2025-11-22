@@ -73,7 +73,6 @@ export function ScrambleText({
   return (
     <motion.span 
       className={`inline-block ${className}`}
-      whileHover={{ scale: 1.02 }}
     >
       {displayText}
     </motion.span>
