@@ -35,6 +35,7 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    transition: background-color 0.3s, color 0.3s;
   }
 }
 
@@ -82,4 +83,50 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-image: linear-gradient(to right, #60a5fa, #a855f7);
+}
+
+/* X-Ray Mode */
+.xray-mode {
+  --xray-primary: #00ff00;
+  background-color: #000000 !important;
+}
+
+.xray-mode * {
+  background: transparent !important;
+  border-color: rgba(0, 255, 0, 0.4) !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  color: var(--xray-primary) !important;
+  box-shadow: none !important;
+  text-shadow: 0 0 2px rgba(0, 255, 0, 0.5) !important;
+  border-radius: 0 !important; /* Wireframe look */
+  transition: all 0.3s ease !important;
+}
+
+/* Specific overrides for readability and effect */
+.xray-mode img,
+.xray-mode video,
+.xray-mode [role="img"],
+.xray-mode .blur-\[100px\] {
+  opacity: 0.1 !important;
+  filter: grayscale(100%) brightness(0.5) sepia(1) hue-rotate(100deg) saturate(5) !important;
+}
+
+.xray-mode .text-transparent {
+  -webkit-text-fill-color: var(--xray-primary) !important;
+  background: none !important;
+}
+
+.xray-mode ::selection {
+  background: var(--xray-primary);
+  color: black !important;
+}
+
+/* Hide scrollbar track in xray mode for cleaner look */
+.xray-mode ::-webkit-scrollbar-track {
+  background: black !important;
+}
+.xray-mode ::-webkit-scrollbar-thumb {
+  background: var(--xray-primary) !important;
+  border: 1px solid var(--xray-primary) !important;
 }
