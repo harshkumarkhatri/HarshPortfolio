@@ -141,7 +141,7 @@ export function ParticleBackground() {
     <canvas
       ref={canvasRef}
       id="particle-bg"
-      className="fixed top-0 left-0 w-full h-full pointer-events-none z-[-5] opacity-50"
+      className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-60"
       style={{ background: "transparent" }}
     />
   );
