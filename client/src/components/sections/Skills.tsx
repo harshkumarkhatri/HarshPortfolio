@@ -30,10 +30,10 @@ export function Skills() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.2, duration: 0.6, ease: "easeOut" }}
-              className="reveal-on-scroll"
+              className="reveal-on-scroll h-full"
             >
-              <SpotlightCard spotlightColor="rgba(34, 197, 94, 0.25)">
-                <div className="p-6 h-full">
+              <SpotlightCard spotlightColor="rgba(34, 197, 94, 0.25)" className="h-full">
+                <div className="p-6 h-full flex flex-col">
                   <h3 className="text-xl font-bold mb-6 pb-2 border-b border-white/10 flex items-center gap-2 relative z-10">
                     <motion.span 
                       className="w-2 h-6 bg-green-500 rounded-full inline-block"
@@ -42,7 +42,7 @@ export function Skills() {
                     {category.category}
                   </h3>
                   
-                  <div className="grid grid-cols-2 gap-4 relative z-10">
+                  <div className="grid grid-cols-2 gap-4 relative z-10 flex-grow content-start">
                     {category.items.map((skill: any, sIdx: number) => (
                       <motion.div 
                         key={sIdx} 

@@ -22,31 +22,41 @@ export function ScrambleText({
   const [isScrambling, setIsScrambling] = useState(true);
   const iterationRef = useRef(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const hasStartedRef = useRef(false);
 
   useEffect(() => {
+    // Reset on text change
+    iterationRef.current = 0;
+    hasStartedRef.current = false;
+    setIsScrambling(true);
+    setDisplayText("");
+
     const startScramble = () => {
-      let currentText = "";
-      const length = text.length;
-      
+      if (hasStartedRef.current) return;
+      hasStartedRef.current = true;
+
       timerRef.current = setInterval(() => {
-        currentText = text
-          .split("")
-          .map((letter, index) => {
-            if (index < iterationRef.current) {
-              return text[index];
-            }
-            return CHARS[Math.floor(Math.random() * CHARS.length)];
-          })
-          .join("");
+        setDisplayText(prev => {
+          const currentIteration = iterationRef.current;
+          
+          if (currentIteration >= text.length) {
+             if (timerRef.current) clearInterval(timerRef.current);
+             setIsScrambling(false);
+             return text;
+          }
 
-        setDisplayText(currentText);
+          return text
+            .split("")
+            .map((letter, index) => {
+              if (index < currentIteration) {
+                return text[index];
+              }
+              return CHARS[Math.floor(Math.random() * CHARS.length)];
+            })
+            .join("");
+        });
 
-        if (iterationRef.current >= length) {
-          if (timerRef.current) clearInterval(timerRef.current);
-          setIsScrambling(false);
-        }
-
-        iterationRef.current += 1 / 3; // Slower reveal
+        iterationRef.current += 1 / 3; 
       }, scrambleSpeed);
     };
 

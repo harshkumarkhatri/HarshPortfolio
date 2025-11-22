@@ -3,9 +3,12 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { ParticleBackground } from "@/components/ui/ParticleBackground";
+import { BootSequence } from "@/components/ui/BootSequence";
+import { NeuralFeed } from "@/components/ui/NeuralFeed";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 
 function Router() {
   return (
@@ -17,6 +20,8 @@ function Router() {
 }
 
 function App() {
+  const [booted, setBooted] = useState(false);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Ignore if typing in an input or textarea
@@ -40,9 +45,18 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ParticleBackground />
-      <Toaster />
-      <Router />
+      <AnimatePresence>
+        {!booted && <BootSequence onComplete={() => setBooted(true)} />}
+      </AnimatePresence>
+      
+      {booted && (
+        <>
+          <ParticleBackground />
+          <NeuralFeed />
+          <Toaster />
+          <Router />
+        </>
+      )}
     </QueryClientProvider>
   );
 }
