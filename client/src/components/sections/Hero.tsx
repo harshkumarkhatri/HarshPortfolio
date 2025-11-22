@@ -1,21 +1,54 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import { personalInfo } from "@/lib/data";
 import { ArrowDown, ExternalLink } from "lucide-react";
+import { useEffect } from "react";
 
 export function Hero() {
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+  const y2 = useTransform(scrollY, [0, 500], [0, -150]);
+
+  // Mouse parallax logic
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 25, stiffness: 700 };
+  const xSpring = useSpring(mouseX, springConfig);
+  const ySpring = useSpring(mouseY, springConfig);
+
+  const rotateX = useTransform(ySpring, [-0.5, 0.5], ["15deg", "-15deg"]);
+  const rotateY = useTransform(xSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const { innerWidth, innerHeight } = window;
+      const x = e.clientX / innerWidth - 0.5;
+      const y = e.clientY / innerHeight - 0.5;
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 perspective-1000">
+      {/* Parallax Background elements */}
+      <motion.div style={{ y: y1, x: useTransform(xSpring, [-0.5, 0.5], [-50, 50]) }} className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-primary/20 blur-[100px]" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-purple-500/10 blur-[100px]" />
-      </div>
+      </motion.div>
+      
+      <motion.div style={{ y: y2, x: useTransform(xSpring, [-0.5, 0.5], [50, -50]) }} className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+         <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-purple-500/10 blur-[100px]" />
+      </motion.div>
 
       <div className="container px-4 mx-auto grid md:grid-cols-2 gap-12 items-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
+          style={{ zIndex: 10 }}
         >
           <motion.span 
             initial={{ opacity: 0, x: -20 }}
@@ -84,27 +117,32 @@ export function Hero() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative hidden md:block"
+          className="relative hidden md:block perspective-1000"
+          style={{ perspective: "1000px" }}
         >
-          <div className="relative w-full aspect-square max-w-md mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 to-purple-600 rounded-3xl opacity-20 blur-2xl transform rotate-6" />
-            <div className="glass rounded-3xl w-full h-full flex items-center justify-center border border-white/10 relative overflow-hidden group">
+          <motion.div 
+            className="relative w-full aspect-square max-w-md mx-auto"
+            style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 to-purple-600 rounded-3xl opacity-20 blur-2xl transform rotate-6 translate-z-[-50px]" />
+            <div className="glass rounded-3xl w-full h-full flex items-center justify-center border border-white/10 relative overflow-hidden group shadow-2xl">
               {/* Abstract representation of code/integration */}
               <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]" />
               
-              <div className="relative z-10 text-center p-8">
-                <div className="w-24 h-24 mx-auto bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-4xl">
+              <div className="relative z-10 text-center p-8 transform translate-z-[20px]">
+                <div className="w-24 h-24 mx-auto bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-4xl shadow-inner">
                   ⚡
                 </div>
                 <h3 className="text-2xl font-bold mb-2">Integrations Specialist</h3>
                 <p className="text-muted-foreground">Connecting systems, building communities.</p>
               </div>
 
-              {/* Floating elements */}
+              {/* Floating elements with stronger parallax */}
               <motion.div 
                 animate={{ y: [0, -10, 0] }}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className="absolute top-10 right-10 bg-card/80 backdrop-blur border border-white/5 p-3 rounded-xl shadow-xl"
+                style={{ x: useTransform(xSpring, [-0.5, 0.5], [20, -20]), y: useTransform(ySpring, [-0.5, 0.5], [20, -20]) }}
+                className="absolute top-10 right-10 bg-card/80 backdrop-blur border border-white/5 p-3 rounded-xl shadow-xl transform translate-z-[60px]"
               >
                 <span className="text-blue-400 font-bold">Oracle SOA</span>
               </motion.div>
@@ -112,12 +150,13 @@ export function Hero() {
               <motion.div 
                 animate={{ y: [0, 10, 0] }}
                 transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-                className="absolute bottom-20 left-10 bg-card/80 backdrop-blur border border-white/5 p-3 rounded-xl shadow-xl"
+                style={{ x: useTransform(xSpring, [-0.5, 0.5], [-30, 30]), y: useTransform(ySpring, [-0.5, 0.5], [-30, 30]) }}
+                className="absolute bottom-20 left-10 bg-card/80 backdrop-blur border border-white/5 p-3 rounded-xl shadow-xl transform translate-z-[40px]"
               >
                 <span className="text-purple-400 font-bold">Flutter</span>
               </motion.div>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 
