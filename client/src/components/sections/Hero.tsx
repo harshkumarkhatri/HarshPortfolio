@@ -100,12 +100,14 @@ export function Hero() {
             className="flex flex-wrap gap-4"
           >
             <motion.a 
-              href="#contact" 
+              href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3Z2WH2U_5qDPsx3oYal6Fhz9cVH2p-6ShGw1uQgXtxSAIovXyTPNU62dIV4y28pPbsBsWcl2V5"
+              target="_blank"
+              rel="noreferrer"
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(59, 130, 246, 0.5)" }}
               whileTap={{ scale: 0.95 }}
               className="bg-primary text-primary-foreground px-8 py-3 rounded-full font-medium transition-colors flex items-center gap-2"
             >
-              Contact Me
+              Book Appointment
             </motion.a>
             <motion.a 
               href={personalInfo.socials.find(s => s.name === "LinkedIn")?.url}
@@ -132,7 +134,7 @@ export function Hero() {
             style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 to-purple-600 rounded-3xl opacity-20 blur-2xl transform rotate-6 translate-z-[-50px]" />
-            <div className="glass rounded-3xl w-full h-full flex items-center justify-center border border-white/10 relative overflow-hidden group shadow-2xl">
+            <div className="glass rounded-3xl w-full h-full flex items-center justify-center border border-border/50 relative overflow-hidden group shadow-2xl">
               {/* Abstract representation of code/integration */}
               <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]" />
               
@@ -140,12 +142,12 @@ export function Hero() {
                 <div className="w-24 h-24 mx-auto bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-4xl shadow-inner">
                   ⚡
                 </div>
-                <h3 className="text-2xl font-bold mb-2">Integrations Specialist</h3>
-                <p className="text-muted-foreground">Connecting systems, building communities.</p>
+                <h3 className="text-2xl font-bold mb-2">Full Stack Engineer</h3>
+                <p className="text-muted-foreground">Flutter • .NET • Cloud • AI</p>
                 
-                <div className="mt-6 font-mono text-xs text-left bg-black/50 p-3 rounded border border-white/10 text-green-400">
+                <div className="mt-6 font-mono text-xs text-left bg-secondary/80 p-3 rounded border border-border/50 text-green-500 dark:text-green-400">
                    <Typewriter 
-                     text={["> Initializing...", "> Connecting APIs...", "> Status: ONLINE"]} 
+                    text={["> Initializing Flutter...", "> Deploying .NET Core...", "> System: SCALABLE"]} 
                      loop={false} 
                      speed={50}
                    />
@@ -157,18 +159,18 @@ export function Hero() {
                 animate={{ y: [0, -10, 0] }}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
                 style={{ x: useTransform(xSpring, [-0.5, 0.5], [20, -20]), y: useTransform(ySpring, [-0.5, 0.5], [20, -20]) }}
-                className="absolute top-10 right-10 bg-card/80 backdrop-blur border border-white/5 p-3 rounded-xl shadow-xl transform translate-z-[60px]"
+                className="absolute top-10 right-10 bg-card/80 backdrop-blur border border-border/50 p-3 rounded-xl shadow-xl transform translate-z-[60px]"
               >
-                <span className="text-blue-400 font-bold">Oracle SOA</span>
+                <span className="text-blue-400 font-bold">Flutter Expert</span>
               </motion.div>
               
               <motion.div 
                 animate={{ y: [0, 10, 0] }}
                 transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
                 style={{ x: useTransform(xSpring, [-0.5, 0.5], [-30, 30]), y: useTransform(ySpring, [-0.5, 0.5], [-30, 30]) }}
-                className="absolute bottom-20 left-10 bg-card/80 backdrop-blur border border-white/5 p-3 rounded-xl shadow-xl transform translate-z-[40px]"
+                className="absolute bottom-20 left-10 bg-card/80 backdrop-blur border border-border/50 p-3 rounded-xl shadow-xl transform translate-z-[40px]"
               >
-                <span className="text-purple-400 font-bold">Flutter</span>
+                <span className="text-purple-400 font-bold">Backend</span>
               </motion.div>
             </div>
           </motion.div>

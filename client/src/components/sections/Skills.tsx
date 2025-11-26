@@ -4,9 +4,9 @@ import { SpotlightCard } from "@/components/ui/SpotlightCard";
 
 export function Skills() {
   return (
-    <section id="skills" className="py-24 relative overflow-hidden bg-black">
+    <section id="skills" className="py-24 relative overflow-hidden bg-background">
       {/* Background subtle glow */}
-      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px] -z-10" />
+      <div className="absolute inset-0 bg-grid-white/[0.02] dark:bg-grid-white/[0.02] bg-grid-black/[0.05] -z-10" />
 
       <div className="container px-4 mx-auto">
         <motion.div
@@ -34,7 +34,7 @@ export function Skills() {
             >
               <SpotlightCard spotlightColor="rgba(34, 197, 94, 0.25)" className="h-full">
                 <div className="p-6 h-full flex flex-col">
-                  <h3 className="text-xl font-bold mb-6 pb-2 border-b border-white/10 flex items-center gap-2 relative z-10">
+                  <h3 className="text-xl font-bold mb-6 pb-2 border-b border-border/50 flex items-center gap-2 relative z-10">
                     <motion.span 
                       className="w-2 h-6 bg-green-500 rounded-full inline-block"
                       layoutId={`pill-${idx}`}
@@ -47,7 +47,7 @@ export function Skills() {
                       <motion.div 
                         key={sIdx} 
                         whileHover={{ scale: 1.05, backgroundColor: "rgba(34, 197, 94, 0.1)" }}
-                        className="flex items-center gap-3 p-3 rounded-lg bg-white/5 transition-colors cursor-default"
+                        className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50 transition-colors cursor-default"
                       >
                         <skill.icon className="text-2xl text-primary/80 group-hover/card:text-green-400 transition-colors" />
                         <span className="text-sm font-medium">{skill.name}</span>

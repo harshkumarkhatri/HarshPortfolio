@@ -24,7 +24,7 @@ export function SpotlightCard({
   return (
     <motion.div
       onMouseMove={handleMouseMove}
-      className={`group/card relative rounded-2xl bg-card/30 border border-white/10 overflow-hidden ${className}`}
+      className={`group/card relative rounded-2xl bg-card/30 border border-border/50 overflow-hidden ${className}`}
     >
       {/* Spotlight Effect */}
       <motion.div

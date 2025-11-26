@@ -9,9 +9,15 @@ export function TerminalContact() {
   ]);
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+  const initialHistoryLength = useRef(2); // Track initial history length
+  const hasMounted = useRef(false);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Only scroll if the component has mounted and history has actually changed due to user interaction
+    if (hasMounted.current && history.length > initialHistoryLength.current) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+    hasMounted.current = true;
   }, [history]);
 
   const handleCommand = (e: React.FormEvent) => {
@@ -79,7 +85,6 @@ export function TerminalContact() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             className="bg-transparent border-none outline-none flex-1 text-green-400 focus:ring-0 p-0"
-            autoFocus
           />
         </form>
         <div ref={bottomRef} />

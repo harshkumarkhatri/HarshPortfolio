@@ -1,21 +1,135 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { experiences } from "@/lib/data";
-import { Calendar, Building2 } from "lucide-react";
-import { useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { workExperiences } from "@/lib/data";
+import { Calendar, Building2, MapPin, ChevronDown } from "lucide-react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
-export function Experience() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-
-  // Animate line filling from 0 to 100% as user scrolls through the section
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+function ExperienceCard({ exp, index }: { exp: typeof workExperiences[0], index: number }) {
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <section id="experience" className="py-24 bg-background/50" ref={ref}>
-      <div className="container px-4 mx-auto">
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay: index * 0.05 }}
+      onClick={() => setIsExpanded(!isExpanded)}
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
+      className="relative group cursor-pointer"
+    >
+      {/* Timeline Connector */}
+      <div className="absolute left-[19px] top-[60px] bottom-[-32px] w-[2px] bg-border/50 group-hover:bg-green-500/30 transition-colors duration-500 last:hidden" />
+
+      <div className="flex gap-6 md:gap-8">
+        {/* Timeline Dot */}
+        <div className="relative mt-1 flex-shrink-0">
+          <motion.div 
+            initial={{ borderColor: "rgba(255,255,255,0.1)", backgroundColor: "transparent" }}
+            whileInView={{ borderColor: "#4ade80", backgroundColor: "rgba(74, 222, 128, 0.1)" }}
+            viewport={{ margin: "-100px 0px -100px 0px" }}
+            animate={{ 
+              scale: isExpanded ? 1.2 : 1,
+              borderColor: isExpanded ? "#4ade80" : undefined,
+              backgroundColor: isExpanded ? "rgba(74, 222, 128, 0.1)" : undefined
+            }}
+            className="w-10 h-10 rounded-full border-2 flex items-center justify-center transition-colors duration-300 bg-background z-10 relative"
+          >
+            <Building2 size={18} className={cn("transition-colors duration-300", isExpanded ? "text-green-400" : "text-muted-foreground")} />
+          </motion.div>
+        </div>
+
+        {/* Content Card */}
+        <div className="flex-1 pb-8">
+          <motion.div 
+            layout
+            className={cn(
+              "glass-card rounded-xl p-5 md:p-6 transition-all duration-300",
+              isExpanded ? "bg-accent/50 border-green-500/30 shadow-[0_0_30px_-10px_rgba(74,222,128,0.1)]" : "hover:bg-accent/30"
+            )}
+          >
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-4 mb-2">
+              <div>
+                <h3 className={cn("text-xl font-bold transition-colors duration-300", isExpanded ? "text-green-400" : "text-foreground")}>
+                  {exp.role}
+                </h3>
+                <div className="text-lg font-medium text-muted-foreground">
+                  {exp.company}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-3 text-xs font-mono text-muted-foreground/70 mt-1 md:mt-0 md:text-right">
+                <div className="flex items-center gap-1.5 bg-secondary/50 px-2 py-1 rounded">
+                  <Calendar size={12} />
+                  {exp.period}
+                </div>
+                {exp.location && (
+                  <div className="flex items-center gap-1.5 bg-secondary/50 px-2 py-1 rounded">
+                    <MapPin size={12} />
+                    {exp.location}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <AnimatePresence>
+              {isExpanded && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-4 mt-4 border-t border-border/50">
+                    <ul className="space-y-2">
+                      {/* @ts-ignore - points exists in data */}
+                      {exp.points?.map((point: string, i: number) => (
+                        <motion.li 
+                          key={i}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.05 }}
+                          className="flex items-start gap-2 text-sm text-muted-foreground/90 leading-relaxed"
+                        >
+                          <span className="mt-1.5 min-w-[5px] h-[5px] rounded-full bg-green-500/60 flex-shrink-0" />
+                          <span>{point}</span>
+                        </motion.li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-4 pt-2 flex justify-end">
+                      <span className="text-[10px] uppercase tracking-wider px-2 py-1 rounded bg-secondary/50 text-muted-foreground/50">
+                        {exp.type === 'work' ? 'Experience' : 'Community'}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {!isExpanded && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mt-2 text-xs text-muted-foreground/40 flex items-center gap-1"
+              >
+                <ChevronDown size={12} />
+                <span>Tap to expand</span>
+              </motion.div>
+            )}
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+export function Experience() {
+  return (
+    <section id="experience" className="py-24 bg-background/50">
+      <div className="container px-4 mx-auto max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -23,81 +137,18 @@ export function Experience() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-center mb-16 reveal-on-scroll"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Experience</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Professional Experience</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            My journey through technology, community building, and leadership.
+            My journey through technology and engineering.
           </p>
         </motion.div>
 
-        <div className="relative max-w-3xl mx-auto">
-          {/* Base Vertical Line */}
-          <div className="absolute left-[20px] md:left-1/2 top-0 bottom-0 w-px bg-white/10 transform md:-translate-x-1/2" />
-          
-          {/* Animated Vertical Line Fill */}
-          <motion.div 
-            style={{ height: lineHeight }}
-            className="absolute left-[20px] md:left-1/2 top-0 w-px bg-green-500 transform md:-translate-x-1/2 origin-top z-0" 
-          />
-
-          <div className="space-y-12">
-            {experiences.map((exp, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
-                className={`relative flex flex-col md:flex-row gap-8 reveal-on-scroll ${
-                  index % 2 === 0 ? "md:flex-row-reverse" : ""
-                }`}
-              >
-                {/* Timeline Dot */}
-                <motion.div 
-                  initial={{ scale: 0, backgroundColor: "hsl(var(--background))" }}
-                  whileInView={{ scale: 1, backgroundColor: "#22c55e" }} // Green on view
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ delay: index * 0.1 + 0.2, type: "spring" }}
-                  className="absolute left-[20px] md:left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full border-4 border-background z-10 mt-6 shadow-[0_0_10px_rgba(34,197,94,0.5)]" 
-                />
-
-                {/* Content */}
-                <div className="ml-12 md:ml-0 md:w-1/2 pt-2 md:px-8">
-                  <motion.div 
-                    whileHover={{ y: -5, scale: 1.02, borderColor: "rgba(34, 197, 94, 0.5)" }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className={`glass-card p-6 rounded-xl border border-white/5 hover:shadow-[0_0_30px_-10px_rgba(34,197,94,0.3)] transition-all duration-300 group cursor-default ${
-                    index % 2 === 0 ? "md:text-right" : "md:text-left"
-                  }`}>
-                    <div className={`flex items-center gap-2 text-sm text-primary font-medium mb-2 ${
-                      index % 2 === 0 ? "md:justify-end" : "md:justify-start"
-                    }`}>
-                      <Calendar size={14} />
-                      {exp.period}
-                    </div>
-                    <h3 className="text-xl font-bold mb-1 group-hover:text-green-400 transition-colors">{exp.role}</h3>
-                    <div className={`flex items-center gap-2 text-muted-foreground mb-4 ${
-                      index % 2 === 0 ? "md:justify-end" : "md:justify-start"
-                    }`}>
-                      <Building2 size={14} />
-                      {exp.company}
-                    </div>
-                    <p className="text-sm text-muted-foreground/80 leading-relaxed">
-                      {exp.description}
-                    </p>
-                    <span className="inline-block mt-4 text-xs px-2 py-1 rounded bg-white/5 border border-white/10 text-muted-foreground group-hover:bg-green-500/10 group-hover:text-green-400 group-hover:border-green-500/20 transition-colors">
-                      {exp.type === 'work' ? 'Professional Exp.' : 'Community'}
-                    </span>
-                  </motion.div>
-                </div>
-                
-                {/* Empty side for layout balance */}
-                <div className="hidden md:block md:w-1/2" />
-              </motion.div>
-            ))}
-          </div>
+        <div className="relative">
+          {workExperiences.map((exp, index) => (
+            <ExperienceCard key={index} exp={exp} index={index} />
+          ))}
         </div>
       </div>
     </section>
   );
 }
-

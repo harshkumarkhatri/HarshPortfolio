@@ -4,7 +4,7 @@ import { TerminalContact } from "@/components/ui/TerminalContact";
 
 export function Footer() {
   return (
-    <footer id="contact" className="py-12 border-t border-white/10 bg-background">
+    <footer id="contact" className="py-12 border-t border-border bg-background">
       <div className="container px-4 mx-auto">
         
         <div className="mb-12">
@@ -15,7 +15,7 @@ export function Footer() {
           <TerminalContact />
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8 pt-8 border-t border-white/5">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8 pt-8 border-t border-border/50">
           <div className="text-center md:text-left">
             <h2 className="text-lg font-bold mb-1">{personalInfo.name}</h2>
             <p className="text-muted-foreground text-sm max-w-xs">

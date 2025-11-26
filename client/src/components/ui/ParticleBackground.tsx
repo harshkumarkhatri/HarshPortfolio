@@ -16,7 +16,7 @@ export function ParticleBackground() {
     let mouseY = 0;
 
     // Configuration
-    const particleCount = 150; // Increased for matrix-like density
+    const particleCount = 300; // Increased for matrix-like density
     const connectionDistance = 150;
     const mouseDistance = 200;
 
